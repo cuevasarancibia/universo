@@ -51,31 +51,30 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ onPlanetClick }) => {
       {/* Planets */}
       <div className="absolute">
         {planets.map((planet, index) => {
-          const angle = (index * 45) % 360; // Distribute planets around the circle
           const radius = Math.min(planet.distance * 0.6, 280); // Limit max distance and scale down
-          const x = Math.cos((angle * Math.PI) / 180) * radius;
-          const y = Math.sin((angle * Math.PI) / 180) * radius;
-          
+          const orbitDuration = 10 + index * 5;
+
           return (
             <div
               key={planet.id}
-              className="absolute cursor-pointer group z-10"
+              className="absolute left-1/2 top-1/2"
               style={{
-                left: `${x}px`,
-                top: `${y}px`,
                 transform: 'translate(-50%, -50%)',
+                animation: `orbit ${orbitDuration}s linear infinite`,
               }}
-              onClick={() => onPlanetClick(planet)}
             >
-              <div
-                className="rounded-full transition-all duration-300 hover:scale-125 hover:shadow-lg group-hover:brightness-110 relative"
-                style={{
-                  width: `${planet.size}px`,
-                  height: `${planet.size}px`,
-                  backgroundColor: planet.color,
-                  boxShadow: `0 0 20px ${planet.color}50`,
-                }}
-              >
+              <div style={{ transform: `translateX(${radius}px)` }}>
+                <div
+                  className="cursor-pointer group z-10 rounded-full transition-all duration-300 hover:scale-125 hover:shadow-lg group-hover:brightness-110 relative"
+                  style={{
+                    width: `${planet.size}px`,
+                    height: `${planet.size}px`,
+                    backgroundColor: planet.color,
+                    boxShadow: `0 0 20px ${planet.color}50`,
+                    transform: 'translate(-50%, -50%)',
+                  }}
+                  onClick={() => onPlanetClick(planet)}
+                >
                 {/* Saturn's rings */}
                 {planet.id === 'saturn' && (
                   <>
@@ -102,6 +101,7 @@ const SolarSystem: React.FC<SolarSystemProps> = ({ onPlanetClick }) => {
                 </div>
               </div>
             </div>
+          </div>
           );
         })}
       </div>
